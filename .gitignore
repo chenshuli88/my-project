@@ -3,3 +3,5 @@
 *.iml
 out
 gen
+/es/target/
+/base/target/
