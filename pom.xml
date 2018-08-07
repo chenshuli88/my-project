@@ -76,6 +76,21 @@
                 <artifactId>jedis</artifactId>
                 <version>2.9.0</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>3.16</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi-ooxml</artifactId>
+                <version>3.16</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.5</version>
+            </dependency>
             <!--Spring 核心模块，其它模块大量使用spring-core -->
             <dependency>
                 <groupId>org.springframework</groupId>
