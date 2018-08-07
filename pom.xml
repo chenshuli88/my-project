@@ -13,6 +13,7 @@
         <module>base</module>
         <module>es</module>
         <module>shiro</module>
+        <module>mq</module>
     </modules>
     <packaging>pom</packaging>
 

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Specify the refresh internal in seconds. -->
+<Configuration monitorInterval="60">
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %p [%c] - &lt;%m&gt;%n"/>
+        </Console>
+        <RollingFile name="file" fileName="logs/mq.log" append="true"
+                     filePattern="mq-%d{yyyy-MM-dd}.log">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %p [%c] - %m%n"/>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <SizeBasedTriggeringPolicy />
+                <TimeBasedTriggeringPolicy interval="24" modulate="true" />
+            </Policies>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <AsyncLogger  name="com.csl" level="info" additivity="false" includeLocation="true">
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="file"/>
+        </AsyncLogger>
+        <AsyncLogger  name="org.springframework" level="warn" />
+        <AsyncLogger name="com.csl.commons" level="info" />
+        <AsyncLogger name="org.apache" level="error" />
+        <AsyncRoot level="warn">
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="file"/>
+        </AsyncRoot>
+    </Loggers>
+</Configuration>
