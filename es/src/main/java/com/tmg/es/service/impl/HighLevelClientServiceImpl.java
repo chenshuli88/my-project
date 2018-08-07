@@ -1,5 +1,6 @@
 package com.tmg.es.service.impl;
 
+import base.utils.JsonUtils;
 import base.utils.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -1160,7 +1161,7 @@ public class HighLevelClientServiceImpl implements HighLevelClientService {
         String source = query.toString();
         HttpEntity entity = new NStringEntity(source, ContentType.APPLICATION_JSON);
         try {
-            Response response = restClient.performRequest(POST, endpoint, Collections.emptyMap(), entity);
+            Response response = restClient.performRequest(POST, endpoint, Collections.<String, String>emptyMap(), entity);
 
             /*response like below:
               {

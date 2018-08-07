@@ -1,9 +1,9 @@
 package com.tmg.es.service.impl;
 
-import com.tmg.escenter.esengine.model.MultiSearchInfo;
-import com.tmg.escenter.esengine.service.TransportClientService;
-import com.tmg.utils.PageUtil;
-import com.tmg.utils.StringUtils;
+import base.utils.PageUtil;
+import base.utils.StringUtils;
+import com.tmg.es.model.MultiSearchInfo;
+import com.tmg.es.service.TransportClientService;
 import org.elasticsearch.action.admin.indices.alias.Alias;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexResponse;

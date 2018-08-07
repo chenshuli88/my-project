@@ -1,7 +1,7 @@
 package com.tmg.es.service;
 
-import com.tmg.escenter.esengine.model.MultiSearchInfo;
-import com.tmg.utils.PageUtil;
+import base.utils.PageUtil;
+import com.tmg.es.model.MultiSearchInfo;
 import org.elasticsearch.action.search.MultiSearchResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.QueryBuilder;
