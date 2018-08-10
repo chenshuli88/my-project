@@ -28,6 +28,7 @@ import org.elasticsearch.script.ScriptType;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.AbstractAggregationBuilder;
 import org.elasticsearch.search.aggregations.Aggregations;
+import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -409,11 +410,16 @@ public class TransportClientServiceImpl implements TransportClientService {
         if(!isExists(index)){
             throw new IllegalStateException("queryByConditionWithPage fail,index " +index +" not exists");
         }
-        SearchResponse response = client.prepareSearch(index).setQuery(queryBuilder).setFrom(pageUtil.getStart()).setSize(pageUtil.getRows()).get();
+        SearchRequestBuilder searchRequestBuilder = client.prepareSearch(index).setQuery(queryBuilder).setFrom(pageUtil.getStart()).setSize(pageUtil.getRows());
+        if(!StringUtils.isTrimEmpty(pageUtil.getOrderBy())){
+            searchRequestBuilder.addSort(pageUtil.getOrderBy(),(pageUtil.getOrder()==null || pageUtil.getOrder() == PageUtil.Order.ASC || pageUtil.getOrder() == PageUtil.Order.asc)? SortOrder.ASC : SortOrder.DESC);
+        }
+        SearchResponse response = searchRequestBuilder.get();
         List<Map<String,Object>> list=new ArrayList<>();
         for (SearchHit documentFields : response.getHits()) {
             list.add(documentFields.getSourceAsMap());
         }
+        pageUtil.setTotalRows((int)response.getHits().getTotalHits());
         return list;
     }
 

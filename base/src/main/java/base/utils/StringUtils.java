@@ -2,10 +2,11 @@ package base.utils;
 
 
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -130,27 +131,12 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         }
     }
 
-    public static String underScore2Camel(String name) {
-        if (name != null && name.matches("^.*_.*$")) {
-            StringBuilder propertyName = new StringBuilder(name.length());
-            propertyName.append(Character.toLowerCase(name.charAt(0)));
 
-            for(int i = 1; i < name.length(); ++i) {
-                char c = name.charAt(i);
-                if ('_' == c && i + 1 < name.length()) {
-                    propertyName.append(Character.toUpperCase(name.charAt(i + 1)));
-                    ++i;
-                } else {
-                    propertyName.append(c);
-                }
-            }
-
-            return propertyName.toString();
-        } else {
-            return name;
-        }
-    }
-
+    /**
+     * 驼峰转下划线
+     * @param name
+     * @return
+     */
     public static String camel2UnderScore(String name) {
         if (name != null && name.matches("^.*[A-Z].*$")) {
             StringBuilder propertyName = new StringBuilder(name.length());
@@ -330,17 +316,6 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         return stringBuilder.toString();
     }
 
-    public static void main(String[] args) throws UnsupportedEncodingException {
-        String s = "    \t\n";
-        logger.debug(isBlank(s));
-        s = "";
-        logger.debug(isEmpty(s));
-        s = "123";
-        logger.debug(isNumeric(s));
-        s = "";
-        logger.debug(isWhitespace(s));
-        System.out.println(left("今天是个好天气", 5));
-    }
 
     public static String encode(String str, String decode, String encode) {
         if (str == null) {
@@ -428,4 +403,166 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
 
         logger = LogFactory.getLog(DateUtils.class);
     }
+
+    /**
+     * 字符串转换成集合
+     *
+     * @param s
+     * @param t
+     * @return
+     */
+    public static <T> Set<T> toSet(String s, Class<T> t) {
+
+        String[] strs = s.split(",");
+        Set<T> set = new HashSet<T>();
+        for (String str : strs) {
+            if (!str.isEmpty() && str.length() != 0) {
+                set.add((T) (str));
+            }
+
+        }
+        return set;
+    }
+
+    /**
+     * 字符串转换成数组
+     *
+     * @param s
+     * @return
+     */
+    public static Long[] toArray(String s) {
+        String[] strs = s.split(",");
+        Long[] array = new Long[strs.length];
+        for (int i = 0; i < strs.length; i++) {
+            if (!strs[i].isEmpty() && strs[i].length() != 0) {
+                array[i] = new Long((strs[i]));
+            }
+
+        }
+        return array;
+    }
+
+    /**
+     * 获取随机字符串
+     *
+     * @return
+     */
+    public static String getSalt() {
+        return UUID.randomUUID().toString().replaceAll("-", "");
+    }
+
+    /**
+     * 获取加盐密码
+     *
+     * @param password
+     * @param salt
+     * @return
+     */
+    public static String getSaltPassword(String password, String salt) {
+        return DigestUtils.md5Hex(DigestUtils.md5Hex(password) + salt);
+    }
+
+    /**
+     * 判断是否为空
+     * @param value
+     * @return
+     */
+    public static boolean isEmpty(CharSequence value) {
+        if (value == null || value.length() == 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * 获取密码的MD5
+     * @param password
+     * @return
+     */
+    public static String getPasswordMD5(String password){
+        return DigestUtils.md5Hex(password);
+    }
+
+    /**
+     * 获取map
+     * @param key
+     * @param value
+     * @return
+     */
+
+    public static Map<String,Object> getMap(String key, Object value){
+        Map<String,Object> map=new HashMap<String, Object>();
+        map.put(key, value);
+        return map;
+    }
+
+    /**
+     * 将键值对添加到数组
+     * @param key
+     * @param value
+     * @param param
+     * @return
+     */
+    public static Map<String,Object> getMap(String key,Object value,Map<String,Object> param){
+        param.put(key, value);
+        return param;
+    }
+
+    /**
+     * 将集合转换成字符串
+     * @param params
+     * @return
+     */
+    public static String getStringOfCollection(Set<Integer> params){
+        if(null!=params && params.size()!=0){
+            StringBuffer sb=new StringBuffer();
+            for(Integer param:params){
+                sb.append(param+",");
+            }
+            return sb.toString().substring(0, sb.toString().length()-1);
+        }else{
+            return null;
+        }
+
+    }
+
+    /**
+     * 将参数转化为大写
+     * @param param
+     * @return
+     */
+    public static String upperCase(String param){
+        if(!isEmpty(param)){
+            return param.toUpperCase();
+        }else{
+            return null;
+        }
+
+    }
+
+    /**
+     * 下划线转驼峰
+     *
+     * @param name a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
+    public static String underScore2Camel(final String name) {
+        if(name == null || !name.matches("^.*(_.*)+$")) return name;
+
+        StringBuilder propertyName = new StringBuilder(name.length());
+        propertyName.append(Character.toLowerCase(name.charAt(0)));
+        for (int i = 1; i < name.length(); i++) {
+            char c = name.charAt(i);
+            if ('_' == c && (i + 1) < name.length()) {
+                propertyName.append(Character.toUpperCase(name.charAt(i + 1)));
+                i++;
+                continue;
+            }
+            propertyName.append(c);
+        }
+        return propertyName.toString();
+    }
+
+
 }
